@@ -82,10 +82,66 @@ end
   Then %{it should #{pass_fail} with exactly:}, exact_output
 end
 
-
 ならば /^実行に(成功|失敗)し、出力が正規表現で以下であること$/ do |pass_fail_ja, expected|
   pass_fail = pass_fail_ja == "成功" ? "pass" : "fail"
   #Then %{it should #{pass_fail} with regexp?:}, expected
   assert_matching_output(expected, all_output)
   assert_success(pass_fail == 'pass')
+end
+
+#### 標準出力／標準エラー出力
+ならば /^標準エラー出力が"([^"]*)"を含んでいること$/ do |expected|
+  Then %{the stderr should contain "#{expected}"}
+end
+
+ならば /^標準エラー出力が以下を含んでいること$/ do |expected|
+  Then %{the stderr should contain:}, expected
+end
+
+ならば /^標準エラー出力が以下を正確に含んでいること$/ do |expected|
+  Then %{the stderr should contain exactly:}, expected
+end
+
+ならば /^標準出力が"([^"]*)"を含んでいること$/ do |expected|
+  Then %{the stdout should contain "#{expected}"}
+end
+
+ならば /^標準出力が以下を含んでいること$/ do |expected|
+  Then %{the stdout should contain:}, expected
+end
+
+ならば /^標準出力が以下を正確に含んでいること$/ do |expected|
+  Then %{the stdout should contain exactly:}, expected
+end
+
+ならば /^標準エラー出力が"([^"]*)"を含んでいないこと$/ do |unexpected|
+  Then %{the stderr should not contain "#{unexpected}"}
+end
+
+ならば /^標準エラー出力が以下を含んでいないこと$/ do |unexpected|
+  Then %{the stderr should not contain:}, unexpected
+end
+
+ならば /^標準出力が"([^"]*)"を含んでいないこと$/ do |unexpected|
+  Then %{the stdout should not contain "#{unexpected}"}
+end
+
+ならば /^標準出力が以下を含んでいないこと$/ do |unexpected|
+  Then %{the stdout should not contain:}, unexpected
+end
+
+ならば /^コマンド`([^`]*)`の標準出力が"([^"]*)"を含んでいること$/ do |cmd, expected|
+  Then %{the stdout from "#{cmd}" should contain "#{expected}"}
+end
+
+ならば /^コマンド`([^`]*)`の標準出力が"([^"]*)"を含んでいないこと$/ do |cmd, unexpected|
+  Then %{the stdout from "#{cmd}" should not contain "#{unexpected}"}
+end
+
+ならば /^コマンド`([^`]*)`の標準エラー出力が"([^"]*)"を含んでいること$/ do |cmd, expected|
+  Then %{the stderr from "#{cmd}" should contain "#{expected}"}
+end
+
+ならば /^コマンド`([^`]*)`の標準エラー出力が"([^"]*)"を含んでいないこと$/ do |cmd, unexpected|
+  Then %{the stderr from "#{cmd}" should not contain "#{unexpected}""}
 end
