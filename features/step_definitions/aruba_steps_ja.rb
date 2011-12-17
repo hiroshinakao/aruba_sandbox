@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-
+require 'aruba/api'
 
 #### コマンド実行
 もし /^コマンド`([^`]*)`を実行する$/ do |cmd|
@@ -19,10 +19,6 @@ end
 end
 
 #### 出力
-ならば /^実行に成功し、以下の出力があること$/ do |string|
-  Then %{it should pass with:}, string
-end
-
 ならば /^出力が"([^"]*)"を含んでいること$/ do |expected|
   Then %{the output should contain "#{expected}"}
 end
@@ -65,4 +61,31 @@ end
 
 ならば /^出力が以下と一致すること$/ do |expected|
   Then %{the output should match:}, expected
+end
+
+#### 終了ステータス
+ならば /^終了ステータスが(\d+)であること$/ do |exit_status|
+  Then %{the exit status should be #{exit_status}}
+end
+
+ならば /^終了ステータスが(\d+)でないこと$/ do |exit_status|
+  Then %{the exit status should not be #{exit_status}}
+end
+
+ならば /^実行に(成功|失敗)し、出力が以下であること$/ do |pass_fail_ja, partial_output|
+  pass_fail = pass_fail_ja == "成功" ? "pass" : "fail"
+  Then %{it should #{pass_fail} with:}, partial_output
+end
+
+ならば /^実行に(成功|失敗)し、出力が正確に以下であること$/ do |pass_fail_ja, exact_output|
+  pass_fail = pass_fail_ja == "成功" ? "pass" : "fail"
+  Then %{it should #{pass_fail} with exactly:}, exact_output
+end
+
+
+ならば /^実行に(成功|失敗)し、出力が正規表現で以下であること$/ do |pass_fail_ja, expected|
+  pass_fail = pass_fail_ja == "成功" ? "pass" : "fail"
+  #Then %{it should #{pass_fail} with regexp?:}, expected
+  assert_matching_output(expected, all_output)
+  assert_success(pass_fail == 'pass')
 end
