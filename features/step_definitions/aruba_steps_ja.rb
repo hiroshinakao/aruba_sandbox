@@ -1,6 +1,52 @@
 # -*- coding: utf-8 -*-
 require 'aruba/api'
 
+#### 前提
+前提 /^クリーンなgemset"([^"]*)"を使用する$/ do |gemset|
+  Given %{I'm using a clean gemset "#{gemset}"}
+end
+
+前提 /^"([^"]*)"という名前のディレクトリを使用する$/ do |dir_name|
+  Given %{a directory named "#{dir_name}"}
+end
+
+前提 /^以下の記述がある"([^"]*)"という名前のファイルを使用する$/ do |file_name, file_content|
+  Given %{a file named "#{file_name}" with:}, file_content
+end
+
+前提 /^(\d+)バイトの"([^"]*)"という名前のファイルを使用する$/ do |file_size, file_name|
+  Given %{a #{file_size} byte file named "#{file_name}"}
+end
+
+前提 /^空の"([^"]*)"という名前のファイルを使用する$/ do |file_name|
+  Given %{an empty file named "#{file_name}"}
+end
+
+#### ファイル操作
+もし /^"([^"]*)"ファイルに以下を記述する$/ do |file_name, file_content|
+  When %{I write to "#{file_name}" with:}, file_content
+end
+
+もし /^"([^"]*)"ファイルに以下を上書きする$/ do |file_name, file_content|
+  When %{I overwrite "#{file_name}" with:}, file_content
+end
+
+もし /^"([^"]*)"ファイルに以下を追記する$/ do |file_name, file_content|
+   When %{I append to "#{file_name}" with:}, file_content
+end
+
+もし /^"([^"]*)"ファイルに"([^"]*)"を追記する$/ do |file_name, file_content|
+  When %{I append to "#{file_name}" with "#{file_content}"}
+end
+
+もし /^"([^"]*)"ファイルを削除する$/ do |file_name|
+  When %{I remove the file "#{file_name}"}
+end
+
+もし /^"([^"]*)"ディレクトリに移動する$/ do |dir|
+  When %{I cd to "#{dir}"}
+end
+
 #### コマンド実行
 もし /^コマンド`([^`]*)`を実行する$/ do |cmd|
   When %{I run `#{cmd}`}
@@ -144,4 +190,61 @@ end
 
 ならば /^コマンド`([^`]*)`の標準エラー出力が"([^"]*)"を含んでいないこと$/ do |cmd, unexpected|
   Then %{the stderr from "#{cmd}" should not contain "#{unexpected}""}
+end
+
+#### ファイル
+ならば /^以下のファイルが存在すること$/ do |files|
+  Then %{the following files should exist:}, files
+end
+
+ならば /^以下のファイルが存在しないこと$/ do |files|
+  Then %{the following files should not exist:}, files
+end
+
+ならば /^"([^"]*)"という名前のファイルが存在すること$/ do |file|
+  Then %{a file named "#{file}" should exist}
+end
+
+ならば /^"([^"]*)"という名前のファイルが存在しないこと$/ do |file|
+  Then %{a file named "#{file}" should not exist}
+end
+
+ならば /^(\d+)バイトの"([^"]*)"という名前のファイルが存在すること$/ do |file_size, file_name|
+  Then %{#{file_size} byte file named "#{file_name}" should exist}
+end
+
+ならば /^以下のディレクトリが存在すること$/ do |directories|
+  Then %{the following directories should exist:}, directories
+end
+
+ならば /^以下のディレクトリが存在しないこと$/ do |directories|
+  Then %{the following directories should not exist:}, directories
+end
+
+ならば /^"([^"]*)"という名前のディレクトリが存在すること$/ do |directory|
+  Then %{a directory named "#{directory}" should exist}
+end
+
+ならば /^"([^"]*)"という名前のディレクトリが存在しないこと$/ do |directory|
+  Then %{a directory named "#{directory}" should not exist}
+end
+
+ならば /^"([^"]*)"ファイルが"([^"]*)"を含んでいること$/ do |file, partial_content|
+  Then %{the file "#{file}" should contain "#{partial_content}"}
+end
+
+ならば /^"([^"]*)"ファイルが"([^"]*)"を含んでいないこと$/ do |file, partial_content|
+  Then %{the file "#{file}" should not contain "#{partial_content}"}
+end
+
+ならば /^"([^"]*)"ファイルが以下を正確に含んでいること$/ do |file, exact_content|
+  Then %{the file "#{file}" should contain exactly:}, exact_content
+end
+
+ならば /^"([^"]*)"ファイルが\/([^\/]*)\/一致すること$/ do |file, partial_content|
+  Then %{the file "#{file}" should match \/#{partial_content}\/}
+end
+
+ならば /^"([^"]*)"ファイルが\/([^\/]*)\/一致しないこと$/ do |file, partial_content|
+  Then %{the file "#{file}" should not match \/#{partial_content}\/}
 end

@@ -1,11 +1,4 @@
 # language: ja
-#Feature: ruby -e
-#  Scenario: print something
-#    When I run `ruby -e "puts 'hello'"`
-#    Then it should pass with:
-#      """
-#      hello
-#      """
 
 機能: コマンド実行
   シナリオ: コマンドを実行する
@@ -83,6 +76,52 @@
     かつ 標準出力が"bye"を含んでいないこと
     ならば 標準エラー出力が"hello"を含んでいないこと
     かつ 標準エラー出力が"bye"を含んでいること
+
+
+  シナリオ: ファイル操作をする
+    もし "./tests"という名前のディレクトリを使用する
+    かつ 以下の記述がある"./tests/test_file.txt"という名前のファイルを使用する
+    """
+    aaa
+    bbb
+    ccc
+
+    """
+    もし "./tests"ディレクトリに移動する
+    ならば "test_file.txt"という名前のファイルが存在すること
+    かつ "test_file.txt"ファイルが"aaa"を含んでいること
+    かつ "test_file.txt"ファイルが"zzz"を含んでいないこと
+
+    もし "test_file.txt"ファイルに以下を追記する
+    """
+    ddd
+
+    """
+    ならば "test_file.txt"ファイルが以下を正確に含んでいること
+    """
+    aaa
+    bbb
+    ccc
+    ddd
+
+    """
+
+    もし "test_file.txt"ファイルに以下を上書きする
+    """
+    eee
+    fff
+
+    """
+    ならば "test_file.txt"ファイルが以下を正確に含んでいること
+    """
+    eee
+    fff
+
+    """
+
+    もし "test_file.txt"ファイルを削除する
+    ならば "test_file.txt"という名前のファイルが存在しないこと
+
 #  シナリオ: 対話形式のコマンドを実行する
 #    もし コマンド`irb`を対話的に実行する
 #    かつ "puts `hello`"とタイプする
