@@ -69,13 +69,13 @@ end
   Then %{the output should contain "#{expected}"}
 end
 
-#Then /^the output from "([^"]*)" should contain "([^"]*)"$/ do |cmd, expected|
-#  assert_partial_output(expected, output_from(cmd))
-#end
+ならば /^`([^`]*)`コマンドを実行した出力が"([^"]*)"を含んでいること$/ do |cmd, expected|
+  Then %{the output from "#{cmd}" should contain "#{expected}"}
+end
 
-#Then /^the output from "([^"]*)" should not contain "([^"]*)"$/ do |cmd, unexpected|
-#  assert_no_partial_output(unexpected, output_from(cmd))
-#end
+ならば /^`([^`]*)`コマンドを実行した出力が"([^"]*)"を含んでいないこと$/ do |cmd, unexpected|
+  Then %{the output from "#{cmd}" should not contain "#{unexpected}"}
+end
 
 ならば /^出力が"([^"]*)"を含んでいないこと$/ do |unexpected|
   Then %{the output should not contain "#{unexpected}"}
@@ -241,10 +241,10 @@ end
   Then %{the file "#{file}" should contain exactly:}, exact_content
 end
 
-ならば /^"([^"]*)"ファイルが\/([^\/]*)\/一致すること$/ do |file, partial_content|
+ならば /^"([^"]*)"ファイルが\/([^\/]*)\/と一致すること$/ do |file, partial_content|
   Then %{the file "#{file}" should match \/#{partial_content}\/}
 end
 
-ならば /^"([^"]*)"ファイルが\/([^\/]*)\/一致しないこと$/ do |file, partial_content|
+ならば /^"([^"]*)"ファイルが\/([^\/]*)\/と一致しないこと$/ do |file, partial_content|
   Then %{the file "#{file}" should not match \/#{partial_content}\/}
 end
